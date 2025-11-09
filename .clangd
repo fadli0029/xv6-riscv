@@ -1,6 +1,6 @@
 CompileFlags:
   CompilationDatabase: "."
-  
+
   Add:
     - "-I."
     - "-Ikernel"

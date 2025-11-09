@@ -27,3 +27,6 @@ _entry:
         call start
 spin:
         j spin    # Jump back to spin label = infinite loop
+        # Note: we should never expect to end up here because the function `start`
+        # that we call above should never return. So, this just acts as a safety
+        # net in case we ever end up here, then we'll just spin forever.
