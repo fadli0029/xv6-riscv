@@ -5,17 +5,25 @@
 .section .text
 .global _entry
 _entry:
-        # set up a stack for C.
-        # stack0 is declared in start.c,
-        # with a 4096-byte stack per CPU.
-        # sp = stack0 + ((hartid + 1) * 4096)
-        la sp, stack0
-        li a0, 1024*4
-        csrr a1, mhartid
-        addi a1, a1, 1
-        mul a0, a0, a1
-        add sp, sp, a0
-        # jump to start() in start.c
+        # Goal: Give each CPU its own stack
+
+        # Step 1: Get base address of stack area
+        la sp, stack0           # sp = address of stack0
+
+        # Step 2: Calculate stack size (4KB = 4096 bytes)
+        li a0, 1024*4           # a0 = 4096
+
+        # Step 3: Find out which CPU we are
+        csrr a1, mhartid        # a1 = CPU ID (0, 1, 2, or 3)
+
+        # Step 4: Calculate offset for this CPU
+        addi a1, a1, 1          # a1 = CPU ID + 1 (so: 1, 2, 3, or 4)
+        mul a0, a0, a1          # a0 = 4096 * (CPU ID + 1)
+
+        # Step 5: Set stack pointer for this CPU
+        add sp, sp, a0          # sp = stack0 + offset
+
+        # Now each CPU has its own stack!
         call start
 spin:
-        j spin
+        j spin    # Jump back to spin label = infinite loop
