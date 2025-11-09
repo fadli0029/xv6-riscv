@@ -6,12 +6,15 @@ CompileFlags:
     - "-Ikernel"
     - "-std=gnu11"
     - "-nostdinc"
+    - "-I/usr/lib/gcc/riscv64-unknown-elf/10.2.0/include"
     - "-ffreestanding"
     - "-fno-common"
     - "-Wall"
     - "-Wno-implicit-int"
     - "-Wno-implicit-function-declaration"
-    
+    - "-x"
+    - "c"
+
   Remove:
     - "-mcmodel=*"
     - "-mno-relax"
