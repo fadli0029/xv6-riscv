@@ -1,0 +1,18 @@
+CompileFlags:
+  CompilationDatabase: "."
+  
+  Add:
+    - "-I."
+    - "-Ikernel"
+    - "-std=gnu11"
+    - "-nostdinc"
+    - "-ffreestanding"
+    - "-fno-common"
+    - "-Wall"
+    - "-Wno-implicit-int"
+    - "-Wno-implicit-function-declaration"
+    
+  Remove:
+    - "-mcmodel=*"
+    - "-mno-relax"
+    - "-march=*"
