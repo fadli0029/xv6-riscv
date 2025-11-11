@@ -26,13 +26,20 @@ struct {
 void
 kinit() {
   initlock(&kmem.lock, "kmem");
+
+  // try to free a range of memory starting from wherever
+  // the kernel memory ends until the max ram memory limit
+  // of xv6, PHYSTOP, which is 128MB.
   freerange(end, (void *)PHYSTOP);
 }
 
 void
 freerange(void *pa_start, void *pa_end) {
   char *p;
+  // Round pa_start up to the nearest page boundary (4KB alignment)
   p = (char *)PGROUNDUP((uint64)pa_start);
+  // Free each page from p to pa_end, stopping when the next page would exceed
+  // pa_end
   for (; p + PGSIZE <= (char *)pa_end; p += PGSIZE)
     kfree(p);
 }
@@ -41,6 +48,9 @@ freerange(void *pa_start, void *pa_end) {
 // which normally should have been returned by a
 // call to kalloc().  (The exception is when
 // initializing the allocator; see kinit above.)
+//
+// This video explained this method really well:
+// https://youtu.be/NC_qkXznvkg?si=GfTbYJ6sdikzqYvV
 void
 kfree(void *pa) {
   struct run *r;
