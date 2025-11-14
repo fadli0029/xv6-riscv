@@ -1,6 +1,8 @@
 OUTPUT_ARCH( "riscv" )
 ENTRY( _entry )
 
+/*NOTE: The dot . is a special variable = "current location counter" */
+
 SECTIONS
 {
   /*
