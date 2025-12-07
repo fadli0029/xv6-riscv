@@ -1,5 +1,8 @@
 // Buffer cache.
 //
+// TODO: I think i can optimize this. There are faster implementation
+// of LRU cache I believe compared to a linked list.
+//
 // The buffer cache is a linked list of buf structures holding
 // cached copies of disk block contents.  Caching disk blocks
 // in memory reduces the number of disk reads and also provides
@@ -12,6 +15,14 @@
 // * Do not use the buffer after calling brelse.
 // * Only one process at a time can use a buffer,
 //     so do not keep them longer than necessary.
+//
+// NOTES:
+// - A buffer cache, bcache, is 30 buffers (bcache->buf), i.e.: a linked list of
+//   buf structures as mentioned above
+// - buffer cache lives in Kernel's RAM memory region
+// - buffer cache is shared by all processes
+// - buffer cache is protected by locks
+// You can actually derive the notes above by going through the code.
 
 #include "types.h"
 #include "param.h"
@@ -24,7 +35,7 @@
 
 struct {
   struct spinlock lock;
-  struct buf buf[NBUF];
+  struct buf buf[NBUF]; // each buffer holds 1kB disk block, see buf->data
 
   // Linked list of all buffers, through prev/next.
   // Sorted by how recently the buffer was used.

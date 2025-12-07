@@ -6,6 +6,7 @@
 #include "fs.h"
 
 struct file {
+  // TODO: make notes on what's these enums for, what they mean, etc.
   enum { FD_NONE, FD_PIPE, FD_INODE, FD_DEVICE } type;
   int ref; // reference count
   char readable;
@@ -28,7 +29,8 @@ struct inode {
   struct sleeplock lock; // protects everything below here
   int valid;             // inode has been read from disk?
 
-  short type; // copy of disk inode
+  // below are copies of disk inode, dinode (see fs.h)
+  short type;
   short major;
   short minor;
   short nlink;

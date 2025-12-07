@@ -385,6 +385,9 @@ ireclaim(int dev) {
 // are listed in ip->addrs[].  The next NINDIRECT blocks are
 // listed in block ip->addrs[NDIRECT].
 
+// I'm guessing ip here stands for "inode pointer", lol again bad naming if i'm
+// right.
+
 // Return the disk block address of the nth block in inode ip.
 // If there is no such block, bmap allocates one.
 // returns 0 if out of disk space.
